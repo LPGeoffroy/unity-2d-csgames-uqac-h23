@@ -13,16 +13,21 @@ public class EnemyManager : MonoBehaviour
         Player = GameObject.FindWithTag("Player");
     }
 
+    void Update()
+    {
+        if (!OneFollower())
+        {
+            UnFollowMode();
+        }
+    }
+
     public void AddEnemy(int id, Enemy enemy)
     {
         enemies.Add(id, enemy);
-        Debug.Log(enemies.Count);
     }
 
     public void FollowMode()
     {
-        Debug.Log("AYOOOO");
-
         foreach (KeyValuePair<int, Enemy> enemy in enemies)
         {
             enemy.Value.playerDetected = true;
@@ -33,7 +38,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (KeyValuePair<int, Enemy> enemy in enemies)
         {
-            if(enemy.Value.playerDetected == true)
+            if(enemy.Value.onTrack == true)
             {
                 return true;
             }
@@ -45,15 +50,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach (KeyValuePair<int, Enemy> enemy in enemies)
         {
-            Vector2 positionA = Player.transform.position;
-            Vector2 positionB = this.transform.position;
-
-            if (Vector2.Distance(positionA, positionB) > 10)
-            {
-
-                float distance = Vector2.Distance(Player.transform.position, enemy.Value.transform.position);
-                enemy.Value.playerDetected = false;
-            }
+            enemy.Value.playerDetected = false;
         }
     }
 }
